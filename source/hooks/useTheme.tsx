@@ -3,7 +3,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const colors = {
   DEFAULT: '#DCDCDC',
-  PRIMARY: '#9C26B0',
+  PRIMARY: '#E6ABDE',
   LABEL: '#FE2472',
   INFO: '#00BCD4',
   ERROR: '#F44336',
@@ -55,11 +55,19 @@ const fonts = {
   },
 };
 
-const spacing = {
-  small: 8,
-  medium: 16,
-  large: 24,
+const space = {
+  xxxs: 2,
+  xxs: 4,
+  xs: 8,
+  s: 12,
+  m: 16,
+  l: 20,
+  xl: 24,
+  xxl: 28,
+  xxxl: 32,
+  xxxxl: 36,
 };
+
 const borderRadius = {
   small: 4,
   medium: 8,
@@ -72,17 +80,26 @@ const fontSizes = {
   large: 20,
 };
 
+const defaultShadow = {
+  elevation: 3,
+  shadowColor: '#000000',
+  shadowOffset: {height: 3, width: 0},
+  shadowOpacity: 0.4,
+  shadowRadius: 6,
+};
+
 export const useTheme = () => {
   const insets = useSafeAreaInsets();
 
   return {
     borderRadius,
-    spacing,
+    space,
     colors,
     fonts,
     fontSizes,
     dimensions,
     insets,
+    defaultShadow,
   };
 };
 

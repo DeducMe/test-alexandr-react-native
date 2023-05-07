@@ -10,6 +10,8 @@ import useTheme from '../hooks/useTheme';
 import IconComponent from '../components/IconComponent/IconComponent';
 import ChatListScreen from '../screens/ChatListScreen';
 import {ChatScreen} from '../screens/ChatScreen';
+import {AddChat} from '../screens/AddChat';
+import {AddGroupChat} from '../screens/AddGroupChat';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,16 @@ const screens: ScreenI[] = [
   {
     name: 'ChatScreen',
     component: ChatScreen,
+    options: {headerShown: false},
+  },
+  {
+    name: 'AddChat',
+    component: AddChat,
+    options: {headerShown: false},
+  },
+  {
+    name: 'AddGroupChat',
+    component: AddGroupChat,
     options: {headerShown: false},
   },
 ];
@@ -60,7 +72,7 @@ const DefaultStackNavigator = () => {
             headerLeft: props => {
               return (
                 <TouchableOpacity
-                  style={{padding: theme.spacing.small}}
+                  style={{padding: theme.space.s}}
                   onPress={() => {
                     if (navigation.canGoBack()) {
                       navigation.goBack();

@@ -3,7 +3,6 @@ import {userData} from '../data/data';
 
 export type IUserData = {
   _id: number;
-  chatId: number | null;
   name: string;
   avatar: string;
 };
