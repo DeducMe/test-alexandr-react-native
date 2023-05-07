@@ -26,14 +26,6 @@ To run the app on an iOS simulator, use the following command:
 npm run ios
 ```
 
-## Testing
-
-To run the tests for the app, use the following command:
-
-```sh
-yarn test
-```
-
 ## License
 
 This project is licensed under the MIT License.
