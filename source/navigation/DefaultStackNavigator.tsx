@@ -12,6 +12,8 @@ import ChatListScreen from '../screens/ChatListScreen';
 import {ChatScreen} from '../screens/ChatScreen';
 import {AddChat} from '../screens/AddChat';
 import {AddGroupChat} from '../screens/AddGroupChat';
+import UserScreen from '../screens/UserScreen';
+import {IUserData} from '../hooks/useUsers';
 
 const Stack = createStackNavigator();
 
@@ -43,11 +45,19 @@ const screens: ScreenI[] = [
     component: AddGroupChat,
     options: {headerShown: false},
   },
+  {
+    name: 'UserScreen',
+    component: UserScreen,
+    options: {headerShown: false},
+  },
 ];
 
 export type RootStackParamList = {
   ChatListScreen: undefined;
   ChatScreen: any;
+  AddChat: {};
+  AddGroupChat: {};
+  UserScreen: {user: IUserData};
 };
 // options: {presentation: 'transparentModal'},
 
@@ -76,7 +86,8 @@ const DefaultStackNavigator = () => {
                   onPress={() => {
                     if (navigation.canGoBack()) {
                       navigation.goBack();
-                    } else navigation.navigate(screens[0].name);
+                      //@ts-ignore
+                    } else navigation.navigate(screens[0].name, {});
                   }}>
                   <IconComponent
                     iconSet="Ionicons"

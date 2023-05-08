@@ -10,11 +10,14 @@ import {TextInput} from 'react-native';
 import {IUserData} from '../../hooks/useUsers';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {RoundButton} from '../../components/RoundButton';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../navigation/DefaultStackNavigator';
+import Avatar from '../../components/Avatar';
 
 export function AddGroupChat() {
   const context = useContext(AppContext);
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const messages = context.messages.messages;
   const users = context.users.users;
@@ -82,15 +85,14 @@ export function AddGroupChat() {
                 justifyContent: 'space-between',
               }}>
               <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={{uri: user.avatar}}
-                  style={{
-                    height: 50,
-                    width: 50,
-                    borderRadius: theme.space.l,
-                    marginRight: theme.space.s,
-                  }}
-                />
+                <Avatar
+                  avatar={user.avatar}
+                  onPress={() => {
+                    navigation.navigate('UserScreen', {
+                      user,
+                    });
+                  }}></Avatar>
+
                 <Text style={{fontSize: theme.fontSizes.large}}>
                   {user.name}
                 </Text>
@@ -130,6 +132,7 @@ export function AddGroupChat() {
             chatData: {
               name: groupName,
               avatar: 'https://placeimg.com/140/140/any',
+              type: 'GROUP',
             },
           });
         }}

@@ -8,11 +8,14 @@ import useTheme from '../../hooks/useTheme';
 import IconComponent from '../../components/IconComponent/IconComponent';
 import {TextInput} from 'react-native';
 import {IUserData} from '../../hooks/useUsers';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../navigation/DefaultStackNavigator';
+import Avatar from '../../components/Avatar';
 
 export function AddChat() {
   const context = useContext(AppContext);
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const messages = context.messages.messages;
   const users = context.users.users;
@@ -74,6 +77,7 @@ export function AddChat() {
                 chatData: {
                   name: `${user.name}`,
                   avatar: user.avatar,
+                  type: 'PERSONAL',
                 },
               });
             }}
@@ -81,15 +85,13 @@ export function AddChat() {
               flexDirection: 'row',
               marginBottom: theme.space.s,
             }}>
-            <Image
-              source={{uri: user.avatar}}
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: theme.space.l,
-                marginRight: theme.space.s,
-              }}
-            />
+            <Avatar
+              avatar={user.avatar}
+              onPress={() => {
+                navigation.navigate('UserScreen', {
+                  user,
+                });
+              }}></Avatar>
             <Text style={{fontSize: theme.fontSizes.large}}>{user.name}</Text>
           </TouchableOpacity>
         );
