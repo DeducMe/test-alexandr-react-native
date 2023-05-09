@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
+  Platform,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import useTheme from '../../hooks/useTheme';
@@ -17,15 +18,16 @@ import FloatingButtonAction from '../../components/FloatingButtonAction';
 import {TextInput} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/DefaultStackNavigator';
+import {makeStyleSheet} from '../../theme/makeStyleSheet';
 
 export default function ChatListScreen() {
   const theme = useTheme();
   const context = useContext(AppContext);
-  const chats = context.chats.chats;
-  const chatsLoading = context.chats.loading;
-  const messages = context.messages.messages;
+  const {chats, loading: chatsLoading} = context.chats;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [chatsAvailable, setChatsAvailable] = useState(chats);
+
+  const styles = makeStyle();
 
   useEffect(() => {
     setChatsAvailable(chats);
@@ -40,7 +42,7 @@ export default function ChatListScreen() {
             <IconComponent
               iconSet="Ionicons"
               name={'chatbubble-outline'}
-              size={25}
+              size={theme.iconSize.m}
             />
           }
           text={'New chat'}
@@ -56,7 +58,7 @@ export default function ChatListScreen() {
             <IconComponent
               iconSet="Ionicons"
               name={'chatbubbles-outline'}
-              size={25}
+              size={theme.iconSize.m}
             />
           }
           text={'New group'}
@@ -66,15 +68,15 @@ export default function ChatListScreen() {
     },
   ];
 
-  function onChangeText(value: string) {
+  const onChangeText = (value: string) => {
     const chatsAvailableFiltered = chats.filter(item =>
       item.name.includes(value),
     );
     setChatsAvailable(chatsAvailableFiltered);
-  }
+  };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       {chatsLoading ? (
         <ActivityIndicator size={'large'}></ActivityIndicator>
       ) : (
@@ -96,16 +98,16 @@ export default function ChatListScreen() {
               }
             }}
           />
-          <View style={{paddingHorizontal: theme.space.s}}>
-            <TextInput
-              placeholder="Search chat"
-              style={{
-                padding: theme.space.s,
-                borderWidth: 1,
-                borderRadius: theme.space.xxs,
-                marginBottom: theme.space.s,
-              }}
-              onChangeText={onChangeText}></TextInput>
+          <View>
+            <View style={styles.searchBar}>
+              <TextInput
+                placeholder="Search chat"
+                onChangeText={onChangeText}></TextInput>
+              <IconComponent
+                size={theme.iconSize.m}
+                iconSet="Feather"
+                name="search"></IconComponent>
+            </View>
             <FlatList
               data={chatsAvailable}
               renderItem={({item}) => {
@@ -120,10 +122,7 @@ export default function ChatListScreen() {
                         chatData: {name, avatar, type},
                       });
                     }}
-                    style={{
-                      flexDirection: 'row',
-                      marginBottom: theme.space.s,
-                    }}>
+                    style={styles.chatItem}>
                     <Image
                       source={{uri: avatar}}
                       style={{
@@ -146,3 +145,31 @@ export default function ChatListScreen() {
     </SafeAreaView>
   );
 }
+
+const makeStyle = makeStyleSheet(theme => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.DEFAULT,
+  },
+  chatItem: {
+    padding: theme.space.s,
+    marginHorizontal: theme.space.xs,
+
+    backgroundColor: theme.colors.DEFAULT_LIGHT,
+    flexDirection: 'row',
+    marginBottom: theme.space.s,
+    borderRadius: theme.space.xxs,
+  },
+  searchBar: {
+    paddingHorizontal: theme.space.s,
+    paddingVertical:
+      Platform.OS === 'android' ? theme.space.xxs : theme.space.s,
+    marginHorizontal: theme.space.xs,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+    backgroundColor: theme.colors.DEFAULT_LIGHT,
+    borderRadius: theme.space.xxs,
+    marginBottom: theme.space.s,
+  },
+}));

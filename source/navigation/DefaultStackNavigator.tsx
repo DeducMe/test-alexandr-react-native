@@ -93,7 +93,7 @@ const DefaultStackNavigator = () => {
                     iconSet="Ionicons"
                     name={'arrow-back'}
                     color={theme.colors.BLACK}
-                    size={25}
+                    size={theme.iconSize.m}
                   />
                 </TouchableOpacity>
               );

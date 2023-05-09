@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect, useContext} from 'react';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Platform, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppContext} from '../../providers/AppProvider';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -17,9 +17,8 @@ export function AddChat() {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const messages = context.messages.messages;
-  const users = context.users.users;
-  const addChatWithUser = context.chats.addChatWithUser;
+  const {users} = context.users;
+  const {addChatWithUser, chats} = context.chats;
 
   const [usersWithoutPersonalChats, setUsersWithoutPersonalChats] = useState<
     IUserData[]
@@ -32,7 +31,7 @@ export function AddChat() {
     let personalChatCreatedWithUserId: number[] = [];
     let availableUsers: IUserData[] = [];
 
-    context.chats.chats
+    chats
       .filter(chat => chat.type === 'PERSONAL')
       .forEach(chat => {
         personalChatCreatedWithUserId.push(chat.users[0]);
@@ -46,24 +45,35 @@ export function AddChat() {
     setUsersAvailable(availableUsers);
   }, []);
 
-  function onChangeText(value: string) {
+  const onChangeText = (value: string) => {
     const usersAvailableFiltered = usersWithoutPersonalChats.filter(item =>
       item.name.includes(value),
     );
     setUsersAvailable(usersAvailableFiltered);
-  }
+  };
 
   return (
-    <SafeAreaView style={{flex: 1, marginHorizontal: theme.space.s}}>
-      <TextInput
-        placeholder="Search user"
+    <SafeAreaView style={{flex: 1, paddingHorizontal: theme.space.s}}>
+      <View
         style={{
-          padding: theme.space.s,
-          borderWidth: 1,
-          borderRadius: theme.space.s,
+          paddingHorizontal: theme.space.s,
+          paddingVertical:
+            Platform.OS === 'android' ? theme.space.xxs : theme.space.s,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+
+          backgroundColor: theme.colors.DEFAULT_LIGHT,
+          borderRadius: theme.space.xxs,
           marginBottom: theme.space.s,
-        }}
-        onChangeText={onChangeText}></TextInput>
+        }}>
+        <TextInput
+          placeholder="Search user"
+          onChangeText={onChangeText}></TextInput>
+        <IconComponent
+          size={theme.iconSize.m}
+          iconSet="Feather"
+          name="search"></IconComponent>
+      </View>
       {usersAvailable.map(user => {
         return (
           <TouchableOpacity

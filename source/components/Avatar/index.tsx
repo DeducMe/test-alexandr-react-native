@@ -1,5 +1,5 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
+import {TouchableOpacity, Image} from 'react-native';
 import useTheme from '../../hooks/useTheme';
 
 export default function Avatar({

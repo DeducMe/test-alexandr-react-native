@@ -1,17 +1,15 @@
 import React from 'react';
 import {
   ColorValue,
-  StyleSheet,
   Text,
   TouchableNativeFeedbackProps,
   View,
-  TouchableNativeFeedback,
   StyleProp,
   ViewStyle,
   TextStyle,
   TouchableOpacity,
 } from 'react-native';
-import { makeStyleSheet } from 'theme/makeStyleSheet';
+import {makeStyleSheet} from '../../theme/makeStyleSheet';
 // import {  } from 'react-native-gesture-handler';
 
 export interface IRoundButtonProps extends TouchableNativeFeedbackProps {
@@ -35,7 +33,7 @@ const RoundButton: React.FC<IRoundButtonProps> = ({
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
       <View style={[styles.container, style]}>
-        <Text style={[styles.textStyle, textStyle, { color: textColor }]}>
+        <Text style={[styles.textStyle, textStyle, {color: textColor}]}>
           {title}
         </Text>
       </View>
@@ -43,11 +41,10 @@ const RoundButton: React.FC<IRoundButtonProps> = ({
   );
 };
 
-const makeStyles = makeStyleSheet((theme) => ({
+const makeStyles = makeStyleSheet(theme => ({
   container: {
     borderRadius: theme.space.xxs,
-    backgroundColor: theme.colors.background,
-    borderWidth: 1,
+    backgroundColor: theme.colors.DEFAULT,
   },
   textStyle: {
     alignSelf: 'center',
@@ -57,4 +54,4 @@ const makeStyles = makeStyleSheet((theme) => ({
   },
 }));
 
-export { RoundButton };
+export {RoundButton};

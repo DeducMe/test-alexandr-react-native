@@ -1,8 +1,7 @@
+import React from 'react';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import {IconPack, getIcon} from './getIcon';
-
-import React from 'react';
-import {StyleProp, StyleSheet, Text, View, ViewStyle} from 'react-native';
 
 type Props = {
   name: string;

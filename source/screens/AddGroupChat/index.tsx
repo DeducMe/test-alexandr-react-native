@@ -13,15 +13,17 @@ import {RoundButton} from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/DefaultStackNavigator';
 import Avatar from '../../components/Avatar';
+import {makeStyleSheet} from '../../theme/makeStyleSheet';
+import {Platform} from 'react-native';
 
 export function AddGroupChat() {
   const context = useContext(AppContext);
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const styles = makeStyle();
 
-  const messages = context.messages.messages;
-  const users = context.users.users;
-  const addGroupChatWithUsers = context.chats.addGroupChatWithUsers;
+  const {users} = context.users;
+  const {addGroupChatWithUsers} = context.chats;
 
   const [usersAvailable, setUsersAvailable] = useState<IUserData[]>([]);
   const [usersChecked, setUsersChecked] = useState<number[]>([]);
@@ -31,39 +33,35 @@ export function AddGroupChat() {
     setUsersAvailable(users);
   }, [usersChecked.length]);
 
-  function onChangeText(value: string) {
+  const onChangeText = (value: string) => {
     const usersAvailableFiltered = users.filter(item =>
       item.name.includes(value),
     );
     setUsersAvailable(usersAvailableFiltered);
-  }
+  };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        marginHorizontal: theme.space.s,
-        justifyContent: 'space-between',
-      }}>
+    <SafeAreaView style={styles.container}>
       <View>
-        <TextInput
-          placeholder="Group name"
-          style={{
-            padding: theme.space.s,
-            borderWidth: 1,
-            borderRadius: theme.space.xxs,
-            marginBottom: theme.space.s,
-          }}
-          onChangeText={setGroupName}></TextInput>
-        <TextInput
-          placeholder="Search user"
-          style={{
-            padding: theme.space.s,
-            borderWidth: 1,
-            borderRadius: theme.space.xxs,
-            marginBottom: theme.space.s,
-          }}
-          onChangeText={onChangeText}></TextInput>
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Group name"
+            onChangeText={text => setGroupName(text)}></TextInput>
+          <IconComponent
+            size={theme.iconSize.m}
+            iconSet="Ionicons"
+            name="chatbubbles-outline"></IconComponent>
+        </View>
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Search user"
+            onChangeText={onChangeText}></TextInput>
+          <IconComponent
+            size={theme.iconSize.m}
+            iconSet="Feather"
+            name="search"></IconComponent>
+        </View>
+
         {usersAvailable.map((user, index) => {
           return (
             <TouchableOpacity
@@ -80,9 +78,13 @@ export function AddGroupChat() {
                 return setUsersChecked([...usersChecked, user._id]);
               }}
               style={{
+                justifyContent: 'space-between',
+                padding: theme.space.s,
+
+                backgroundColor: theme.colors.DEFAULT_LIGHT,
                 flexDirection: 'row',
                 marginBottom: theme.space.s,
-                justifyContent: 'space-between',
+                borderRadius: theme.space.xxs,
               }}>
               <View style={{flexDirection: 'row'}}>
                 <Avatar
@@ -116,6 +118,7 @@ export function AddGroupChat() {
               : theme.colors.PRIMARY,
           paddingVertical: theme.space.xxs,
         }}
+        textColor={theme.colors.DEFAULT_LIGHT}
         title="Create group chat"
         onPress={() => {
           const chatId = new Date().getTime();
@@ -123,7 +126,7 @@ export function AddGroupChat() {
             usersChecked,
             chatId,
             groupName,
-            'https://placeimg.com/140/140/any',
+            'https://picsum.photos/140',
           );
           navigation.goBack();
           navigation.navigate('ChatScreen', {
@@ -131,7 +134,7 @@ export function AddGroupChat() {
             chatId,
             chatData: {
               name: groupName,
-              avatar: 'https://placeimg.com/140/140/any',
+              avatar: 'https://picsum.photos/140',
               type: 'GROUP',
             },
           });
@@ -140,3 +143,23 @@ export function AddGroupChat() {
     </SafeAreaView>
   );
 }
+
+const makeStyle = makeStyleSheet(theme => ({
+  input: {
+    paddingHorizontal: theme.space.s,
+    paddingVertical:
+      Platform.OS === 'android' ? theme.space.xxs : theme.space.s,
+    backgroundColor: theme.colors.DEFAULT_LIGHT,
+    borderRadius: theme.space.xxs,
+    marginBottom: theme.space.s,
+
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: theme.space.s,
+    justifyContent: 'space-between',
+    backgroundColor: theme.colors.DEFAULT,
+  },
+}));

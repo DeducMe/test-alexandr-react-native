@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useState} from 'react';
 import {IMessage} from 'react-native-gifted-chat';
 
 export default function useMessages() {

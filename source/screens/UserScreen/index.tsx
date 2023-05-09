@@ -29,14 +29,14 @@ export default function UserScreen({
     chat.users.includes(user._id),
   );
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: theme.colors.DEFAULT, flex: 1}}>
       <Image
         source={{uri: user.avatar}}
         style={{
           width: 100,
           height: 100,
           alignSelf: 'center',
-          borderRadius: theme.space.xxxxl,
+          borderRadius: 100,
         }}
       />
       <Text
@@ -61,9 +61,13 @@ export default function UserScreen({
                 });
               }}
               style={{
+                padding: theme.space.s,
+                marginHorizontal: theme.space.xs,
+
+                backgroundColor: theme.colors.DEFAULT_LIGHT,
                 flexDirection: 'row',
                 marginBottom: theme.space.s,
-                marginHorizontal: theme.space.s,
+                borderRadius: theme.space.xxs,
               }}>
               <Image
                 source={{uri: avatar}}

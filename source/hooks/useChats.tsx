@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {userData} from '../data/data';
 
 export type IChat = {
   type: string;
@@ -48,7 +47,7 @@ export default function useChats() {
       {
         _id: 1,
         name: 'User1',
-        avatar: 'https://placeimg.com/140/140/any',
+        avatar: 'https://picsum.photos/140',
         users: [1],
         type: 'PERSONAL',
       },

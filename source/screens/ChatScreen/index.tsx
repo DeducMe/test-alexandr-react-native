@@ -32,15 +32,18 @@ export function ChatScreen({
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   const context = useContext(AppContext);
-  const chatMessages = context.messages.messages[chatId];
+  const {setChatMessages, messages: contextMessages} = context.messages;
+  const chatMessages = contextMessages[chatId];
+
   const users = context.users.users.filter(item =>
     usersIds?.includes(item._id),
   );
+
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setMessages(chatMessages || []);
     }, []),
   );
@@ -61,10 +64,7 @@ export function ChatScreen({
         : [...messages];
 
       setMessages((previousMessages: IMessage[]) => {
-        context.messages.setChatMessages(
-          [...previousMessages, ...answers],
-          chatId,
-        );
+        setChatMessages([...previousMessages, ...answers], chatId);
 
         return GiftedChat.append(previousMessages, [...answers]);
       });
@@ -98,7 +98,11 @@ export function ChatScreen({
           ['Cancel']: () => {},
         }}
         icon={() => (
-          <IconComponent iconSet="Entypo" name={'attachment'} size={20} />
+          <IconComponent
+            iconSet="Entypo"
+            name={'attachment'}
+            size={theme.iconSize.m}
+          />
         )}
         onSend={args => console.log(args)}
       />
@@ -106,14 +110,22 @@ export function ChatScreen({
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <View style={{flex: 1, paddingBottom: theme.insets.bottom}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: theme.colors.DEFAULT_LIGHT,
+          paddingBottom: theme.space.xs,
+          paddingTop: theme.space.xs + theme.insets.top,
+          ...theme.defaultShadow,
+        }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <IconComponent
             style={{marginRight: theme.space.l}}
             name="chevron-back"
             iconSet="Ionicons"
-            size={40}
+            size={theme.iconSize.l}
           />
         </TouchableOpacity>
         <Avatar
@@ -127,13 +139,21 @@ export function ChatScreen({
         <Text style={{fontSize: theme.fontSizes.large}}>{chatData.name}</Text>
       </View>
       <GiftedChat
+        renderUsernameOnMessage
         renderActions={renderActions}
         messages={messages}
         onSend={messages => onSend(messages)}
+        onPressAvatar={user => {
+          const {name, _id, avatar} = user;
+
+          navigation.navigate('UserScreen', {
+            user: {name: `${name}`, _id: Number(_id), avatar: `${avatar}`},
+          });
+        }}
         user={{
           _id: 999,
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
